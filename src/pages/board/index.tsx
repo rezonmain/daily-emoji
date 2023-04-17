@@ -10,12 +10,7 @@ export const LatestPost = () => {
   });
   if (isLoading) return <Spinner size={22} />;
   if (error) return <p className="text-red-400">Something went wrong</p>;
-  return (
-    <>
-      <p className="text-white">Currently showing: </p>
-      <p className=" text-center text-2xl">{data?.content}</p>
-    </>
-  );
+  return <p className="text-[10rem]">{data?.content}</p>;
 };
 
 const Page: NextPage = () => {
