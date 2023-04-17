@@ -12,10 +12,10 @@ const LatestPost = () => {
   if (isLoading) return <Spinner size={22} />;
   if (error) return <p className="text-red-400">Something went wrong</p>;
   return (
-    <>
-      <p className="text-white">Currently showing: </p>
+    <div>
+      <p>Currently showing: </p>
       <p className=" text-center text-2xl">{data?.content}</p>
-    </>
+    </div>
   );
 };
 
@@ -35,13 +35,7 @@ const NewPost = () => {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm<Post>({
+  const { register, handleSubmit, watch, reset } = useForm<Post>({
     resolver: zodResolver(PostSchema),
   });
   const content = watch("content");
@@ -52,24 +46,21 @@ const NewPost = () => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        void handleSubmit(onSubmit)();
+        void handleSubmit(onSubmit, (e) =>
+          toast.error(e.content?.message ?? "An error ocurred please try again")
+        )();
       }}
-      className="flex flex-row justify-between gap-4 border-none text-white outline-none"
+      className="flex flex-row justify-between gap-4"
     >
       <div>
         <input
           autoFocus
-          className=" h-10 w-48 grow bg-transparent p-2"
+          className="h-12 w-full grow appearance-none border-slate-100 bg-transparent p-2 text-center outline-none focus:border-b-2"
           placeholder="Post something..."
           {...register("content")}
           type="text"
           disabled={isLoading}
         />
-        {!!errors.content && (
-          <p className=" max-w-prose pt-2 text-red-400">
-            {errors.content.message}
-          </p>
-        )}
       </div>
 
       <button
@@ -88,9 +79,12 @@ const Page: NextPage = () => {
     <>
       <Head>
         <title>Daily Emoji | Post</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌯</text></svg>"
+        />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-10 bg-gradient-to-b from-purple-900 to-purple-950 text-slate-100">
         <NewPost />
         <LatestPost />
       </main>
